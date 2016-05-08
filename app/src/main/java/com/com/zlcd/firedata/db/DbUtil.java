@@ -36,7 +36,7 @@ public class DbUtil {
     }
 
 
-    public   boolean   addCbc(Cbc  cbc,SQLiteDatabase  db){
+    public static   boolean   addCbc(Cbc  cbc,SQLiteDatabase  db){
         try {
             ContentValues     values = new ContentValues();
             values.put("jhcbrq",cbc.jhcbrq);
@@ -58,7 +58,7 @@ public class DbUtil {
         return  false;
     }
 
-    public   boolean   updateCbc(Cbc   cbc,SQLiteDatabase  db){
+    public static   boolean   updateCbc(Cbc   cbc,SQLiteDatabase  db){
         try {
             ContentValues     values = new ContentValues();
             values.put("jhcbrq",cbc.jhcbrq);

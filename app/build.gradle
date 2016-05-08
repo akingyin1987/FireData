@@ -31,5 +31,5 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.5'
     compile 'io.reactivex:rxandroid:1.2.0'
     compile 'org.byteam.superadapter:superadapter:3.1@aar'
-    compile 'org.xutils:xutils:3.3.34'
+    compile 'com.github.clans:fab:1.6.3'
 }
