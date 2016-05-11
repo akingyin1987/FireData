@@ -128,9 +128,9 @@ public class IndexActivity  extends AppCompatActivity {
                String   keyname = name.getText().toString().trim();
                String   keyprot = port.getText().toString().trim();
                String   keyhttp = http.getText().toString().trim();
-               pref.saveData("key_name",key_name);
-               pref.saveData("key_port",key_port);
-               pref.saveData("key_http",key_http);
+               pref.saveData("key_name",keyname);
+               pref.saveData("key_port",keyprot);
+               pref.saveData("key_http",keyhttp);
                showToash("保存成功");
             }
           })
@@ -154,6 +154,26 @@ public class IndexActivity  extends AppCompatActivity {
         //}
     }
 
+  private long exitTime = 0;
 
+  public void doExitApp() {
+    if ((System.currentTimeMillis() - exitTime) > 2000) {
+      Toast.makeText(this, R.string.press_again_exit_app, Toast.LENGTH_SHORT).show();
+      exitTime = System.currentTimeMillis();
+    } else {
+      android.os.Process.killProcess(android.os.Process.myPid());
+      System.exit(0);
+      finish();
+    }
+  }
 
+  @Override
+  public void onBackPressed() {
+    if(menu.isOpened()){
+      menu.close(true);
+    }else{
+      doExitApp();
+    }
+
+  }
 }

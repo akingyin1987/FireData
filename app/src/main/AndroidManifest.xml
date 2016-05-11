@@ -46,6 +46,8 @@
         <activity android:name=".activity.MeterListActivity"
                   android:screenOrientation="portrait"
                    />
+        <activity android:name="zhou.tools.fileselector.FileSelectorActivity"
+                  android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
