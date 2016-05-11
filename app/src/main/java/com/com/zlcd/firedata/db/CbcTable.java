@@ -14,7 +14,7 @@ public class CbcTable  {
 
     public   static   String   query_all_sql="select * from "+table_name;
 
-    public   static   String    table_create_sql="create table if not exists CREATE TABLE "+table_name+"  ( " +
+    public   static   String    table_create_sql="create table if not exists  "+table_name+"  ( " +
             "    cbcid   VARCHAR( 20 )," +
             "    cbjhid  VARCHAR( 20 )," +
             "    cbjhms  VARCHAR( 200 )," +

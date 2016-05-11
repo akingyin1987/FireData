@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
@@ -17,12 +18,20 @@ import java.io.IOException;
  */
 public class DatabaseContext extends ContextWrapper {
 
+    private   String  dbDir;
+
     /**
      * 构造函数
      * @param    base 上下文环境
      */
     public DatabaseContext(Context base){
         super(base);
+        this.dbDir = Environment.getExternalStorageDirectory().getAbsolutePath()+ File.separator+"gas_database";
+    }
+
+    public DatabaseContext(Context  context,String  dir){
+        super(context);
+        this.dbDir = dir;
     }
 
     /**
@@ -41,8 +50,7 @@ public class DatabaseContext extends ContextWrapper {
         }
         else{//如果存在
             //获取sd卡路径
-            String dbDir=android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-            dbDir += "/gas_database";//数据库所在目录
+
             String dbPath = dbDir+File.separator+name;//数据库路径
             //判断目录是否存在，不存在则创建该目录
             File dirFile = new File(dbDir);
