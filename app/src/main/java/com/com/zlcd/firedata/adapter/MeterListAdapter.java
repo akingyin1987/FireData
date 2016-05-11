@@ -10,6 +10,7 @@ package com.com.zlcd.firedata.adapter;
 
 import android.content.Context;
 
+import android.view.View;
 import com.com.zlcd.firedata.R;
 import com.com.zlcd.firedata.db.Cbjl;
 import java.util.List;
@@ -36,6 +37,8 @@ public class MeterListAdapter extends SuperAdapter<Cbjl> {
 
     holder.setText(R.id.tv_listdemo,item.yhdzbm );
     holder.setText(R.id.tv_listplantime,item.yhh);
+    holder.setVisibility(R.id.btn_down, View.GONE);
+    holder.setVisibility(R.id.btn_upload,View.GONE);
 
   }
 }
