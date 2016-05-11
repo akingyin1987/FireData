@@ -42,7 +42,6 @@ public class FileUtils {
 
 
                 for (File e : files) {
-
                     HashMap<String, Object> value = new HashMap<>(3);
                     String p = e.getAbsolutePath();
                     String name = getFileName(p);

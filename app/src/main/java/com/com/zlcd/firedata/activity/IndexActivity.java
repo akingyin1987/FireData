@@ -1,5 +1,6 @@
 package com.com.zlcd.firedata.activity;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -26,8 +27,13 @@ import com.com.zlcd.firedata.db.DbUtil;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.byteam.superadapter.OnItemClickListener;
+import zhou.tools.fileselector.FileSelectorDialog;
+import zhou.tools.fileselector.config.FileConfig;
+import zhou.tools.fileselector.utils.FileFilter;
+import zhou.tools.fileselector.utils.FileType;
 
 /**
  * Created by Administrator on 2016/5/8.
@@ -42,7 +48,7 @@ public class IndexActivity  extends AppCompatActivity {
 
     FloatingActionMenu menu;
 
-    FloatingActionButton  fab12;
+    FloatingActionButton  fab12,fab22,fab32;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +67,19 @@ public class IndexActivity  extends AppCompatActivity {
         fab12.setOnClickListener(new View.OnClickListener() {
           @Override public void onClick(View v) {
             showSettingDialog();
+          }
+        });
+
+        fab22 = (FloatingActionButton)findViewById(R.id.fab22);
+        fab22.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            showFileSelectDialog();
+          }
+        });
+        fab32 = (FloatingActionButton)findViewById(R.id.fab32);
+        fab32.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            showDbFilePathDialog();
           }
         });
         try {
@@ -105,6 +124,50 @@ public class IndexActivity  extends AppCompatActivity {
     }
 
 
+
+    public   void   showDbFilePathDialog(){
+      SharedpreferencesUtil  pref = new SharedpreferencesUtil(this);
+      String   dbfilepath = pref.getStringData("dbpath");
+      new MaterialDialog.Builder(this)
+          .title("DB路径")
+          .content(dbfilepath)
+          .positiveText("关闭")
+
+          .show();
+    }
+
+    public   void   showFileSelectDialog(){
+      menu.toggle(true);
+      FileConfig  config = new FileConfig();
+      config.selectType = FileType.FILE;
+      config.filterModel= FileFilter.FILTER_CUSTOM;
+      config.filter=new String[]{"db"};
+      FileSelectorDialog fileDialog = new FileSelectorDialog();
+      //设置文件选择完成后的回调事件
+      fileDialog.setOnSelectFinish(new FileSelectorDialog.OnSelectFinish() {
+        @Override
+        public void onSelectFinish(ArrayList<String> paths) {
+          if(null != paths && paths.size()==1){
+            SharedpreferencesUtil  pref = new SharedpreferencesUtil(IndexActivity.this);
+            pref.saveData("dbpath",paths.get(0));
+            MyApp.getIntense().initSqliteDb();
+            db = MyApp.getIntense().getDb();
+            List<Cbc>  items = DbUtil.findAllCbc(db);
+            adapter.clear();
+            adapter.addAll(items);
+          }
+
+        }
+      });
+      //传递配置信息
+      Bundle bundle = new Bundle();
+      bundle.putSerializable(FileConfig.FILE_CONFIG, config);
+      fileDialog.setArguments(bundle);
+      FragmentTransaction ft = getFragmentManager().beginTransaction();
+      ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+      //在需要打开对话框时调用show函数
+      fileDialog.show(ft, "fileDialog");
+    }
 
     public   void   showSettingDialog(){
       final SharedpreferencesUtil  pref = new SharedpreferencesUtil(this);
@@ -153,6 +216,12 @@ public class IndexActivity  extends AppCompatActivity {
         //    db.close();
         //}
     }
+
+  @Override
+  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    super.onActivityResult(requestCode, resultCode, data);
+
+  }
 
   private long exitTime = 0;
 

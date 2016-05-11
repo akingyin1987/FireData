@@ -16,7 +16,7 @@ public class DbUtil {
 
     public   static List<Cbc>   findAllCbc(SQLiteDatabase   db){
         List<Cbc>    datas = new ArrayList<>();
-      System.out.println(null == db);
+
         Cursor  cursor = db.rawQuery(CbcTable.query_all_sql,null);
         while (cursor.moveToNext()){
             Cbc   cbc = new Cbc();

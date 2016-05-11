@@ -5,6 +5,7 @@ import android.content.ContextWrapper;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -17,6 +18,38 @@ import java.io.IOException;
  *
  */
 public class DatabaseContext extends ContextWrapper {
+
+
+    /**
+     * 获取文件名
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getFileName(String filePath) {
+        if (TextUtils.isEmpty(filePath)) {
+            return "";
+        }
+
+        int filePosi = filePath.lastIndexOf(File.separator);
+        return (filePosi == -1) ? filePath : filePath.substring(filePosi + 1);
+    }
+
+    /**
+     * 获取路径
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getFolderName(String filePath) {
+
+        if (TextUtils.isEmpty(filePath)) {
+            return filePath;
+        }
+
+        int filePosi = filePath.lastIndexOf(File.separator);
+        return (filePosi == -1) ? "" : filePath.substring(0, filePosi+1);
+    }
 
     private   String  dbDir;
 
@@ -51,11 +84,21 @@ public class DatabaseContext extends ContextWrapper {
         else{//如果存在
             //获取sd卡路径
 
-            String dbPath = dbDir+File.separator+name;//数据库路径
+            String dbPath = dbDir;
             //判断目录是否存在，不存在则创建该目录
-            File dirFile = new File(dbDir);
-            if(!dirFile.exists())
-                dirFile.mkdirs();
+            if(dbPath.endsWith(".db")){
+                //当前路径是包含文件
+                String  dir = getFolderName(dbDir);
+                File dirFile = new File(dir);
+                if(!dirFile.exists())
+                    dirFile.mkdirs();
+            }else{
+                File dirFile = new File(dbDir);
+                if(!dirFile.exists())
+                    dirFile.mkdirs();
+                dbPath = dbDir+File.separator+name;//数据库路径
+            }
+
 
             //数据库文件是否创建成功
             boolean isFileCreateSuccess = false;
